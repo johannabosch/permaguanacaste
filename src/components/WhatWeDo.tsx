@@ -4,9 +4,9 @@ const WhatWeDo = () => {
       <div className="container mx-auto px-4 lg:px-8">
 
         <div className="text-center">
-          <div className="bg-green-50 rounded-2xl p-8 lg:p-12 max-w-4xl mx-auto">
-            <h3 className="text-3xl font-maname font-bold text-green-800 mb-6">
-              Our Approach
+          <div className="rounded-2xl p-8 lg:p-12 max-w-4xl mx-auto">
+            <h3 className="text-3xl lg:text-4xl font-maname tracking-wide mb-6">
+              Our Philosophy
             </h3>
             <p className="text-lg font-maname text-gray-700 leading-relaxed mb-6">
               Every project begins with careful observation and analysis of your land's unique characteristics. 
