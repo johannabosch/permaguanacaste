@@ -29,7 +29,7 @@ const Header = () => {
           
           {/* Services Dropdown */}
           <div 
-            className="relative"
+            className="relative group"
             onMouseEnter={() => setIsServicesOpen(true)}
             onMouseLeave={() => setIsServicesOpen(false)}
           >
@@ -45,25 +45,43 @@ const Header = () => {
               </svg>
             </button>
             
-            {isServicesOpen && (
-              <div className="absolute top-full left-0 mt-2 w-72 bg-white/50 backdrop-blur-md rounded-xl shadow-2xl border border-white/20 py-3 z-50 animate-in fade-in-0 zoom-in-95 duration-200">
-                <Link href="/services/food-systems" className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50 last:border-b-0">
-                  FOOD SYSTEMS
-                </Link>
-                <Link href="/services/soil-health" className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50 last:border-b-0">
-                  SOIL HEALTH
-                </Link>
-                <Link href="/services/house-design" className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50 last:border-b-0">
-                  HOUSE DESIGN
-                </Link>
-                <Link href="/services/aquaculture" className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50 last:border-b-0">
-                  AQUACULTURE
-                </Link>
-                <Link href="/services/pond-swimming-pool-design" className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm">
-                  POND & SWIMMING POOL DESIGN
-                </Link>
-              </div>
-            )}
+            <div className={`absolute top-full left-0 mt-2 w-72 bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/20 py-3 z-50 transition-all duration-200 ${isServicesOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+              <Link 
+                href="/services/food-systems" 
+                className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50"
+                onClick={() => setIsServicesOpen(false)}
+              >
+                FOOD SYSTEMS
+              </Link>
+              <Link 
+                href="/services/soil-health" 
+                className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50"
+                onClick={() => setIsServicesOpen(false)}
+              >
+                SOIL HEALTH
+              </Link>
+              <Link 
+                href="/services/house-design" 
+                className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50"
+                onClick={() => setIsServicesOpen(false)}
+              >
+                HOUSE DESIGN
+              </Link>
+              <Link 
+                href="/services/aquaculture" 
+                className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50"
+                onClick={() => setIsServicesOpen(false)}
+              >
+                AQUACULTURE
+              </Link>
+              <Link 
+                href="/services/pond-swimming-pool-design" 
+                className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm"
+                onClick={() => setIsServicesOpen(false)}
+              >
+                POND & SWIMMING POOL DESIGN
+              </Link>
+            </div>
           </div>
           
           <Link href="/learn" className="text-white hover:text-green-200 px-4 pb-2 pt--1 transition-colors font-maname tracking-widest">
