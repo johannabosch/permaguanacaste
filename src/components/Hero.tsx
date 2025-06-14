@@ -1,7 +1,7 @@
 const Hero = () => {
   return (
     <section 
-      className="hero h-[90vh] w-full bg-cover bg-center bg-no-repeat relative"
+      className="hero h-[70vh] w-full bg-cover bg-center bg-no-repeat relative"
       style={{
         backgroundImage: "url('/images/hero.jpg')",
       }}
@@ -9,18 +9,17 @@ const Hero = () => {
       {/* Overlay for better text readability */}
       <div className="hero-overlay bg-black bg-opacity-40"></div>
       
-      <div className="hero-content text-center text-white z-10 absolute inset-0 flex items-center justify-center pt-0 pb-50">
+      <div className="hero-content text-center text-white z-10 absolute inset-0 flex items-start justify-center pt-24 lg:pt-32">
         <div className="max-w-4xl mx-auto px-4">
-          <h1 className="text-5xl lg:text-6xl mb-8 font-maname tracking-wide">
+          <h1 className="text-4xl lg:text-5xl mb-6 font-maname tracking-wide">
             P E R M A G U A N A C A S T E
           </h1>
-          <p className="text-xl lg:text-2xl font-anicizer italic leading-relaxed max-w-3xl mx-auto tracking-widest">
+          <p className="text-lg lg:text-xl font-anicizer italic leading-relaxed max-w-3xl mx-auto tracking-widest">
             Landscape Design and Consultation
           </p>
-          <p className="text-lg lg:text-xl font-anicizer italic opacity-90 tracking-widest">
+          <p className="text-base lg:text-lg font-anicizer italic opacity-90 tracking-widest">
             Guanacaste, Costa Rica
           </p>
-
         </div>
       </div>
     </section>
