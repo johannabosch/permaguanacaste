@@ -7,8 +7,22 @@ export function useDimensions(ref: React.RefObject<HTMLElement>) {
     if (ref.current) {
       dimensions.current.width = ref.current.offsetWidth;
       dimensions.current.height = ref.current.offsetHeight;
+      
+      // Update dimensions on resize
+      const updateDimensions = () => {
+        if (ref.current) {
+          dimensions.current.width = ref.current.offsetWidth;
+          dimensions.current.height = ref.current.offsetHeight;
+        }
+      };
+
+      window.addEventListener('resize', updateDimensions);
+      
+      return () => {
+        window.removeEventListener('resize', updateDimensions);
+      };
     }
   }, [ref]);
 
   return dimensions.current;
-}
+} 

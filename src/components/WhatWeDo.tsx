@@ -2,13 +2,13 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import Services from './Services';
+import ProfessionalServices from './ProfessionalServices';
 
 const WhatWeDo = () => {
   return (
     <div>
-      {/* Services Section */}
-      <Services />
+      {/* Professional Services Section */}
+      <ProfessionalServices />
       
       {/* Philosophy and other sections */}
       <section className="py-20 bg-white">
@@ -19,15 +19,8 @@ const WhatWeDo = () => {
               <h3 className="text-3xl lg:text-4xl font-maname tracking-wide mb-6">
                 Our Philosophy
               </h3>
-              <p className="text-lg font-maname text-gray-700 leading-relaxed mb-6">
-                Every project begins with careful observation and analysis of your land's unique characteristics. 
-                We work with natural patterns, climate, soil, water flow, and existing ecosystems to create 
-                designs that are both beautiful and functional.
-              </p>
-              <p className="text-lg font-maname text-gray-700 leading-relaxed">
-                Following Bill Mollison's core principles of <em>care for the earth</em>, <em>care for people</em>, 
-                and <em>fair share</em>, we ensure that every design contributes to a more sustainable and 
-                abundant future for all.
+              <p className="text-lg font-maname text-gray-700 leading-relaxed tracking-widest">
+                We believe in working with nature, not against it. Our permaculture approach creates sustainable systems that benefit both people and the planet.
               </p>
             </div>
           </div>
