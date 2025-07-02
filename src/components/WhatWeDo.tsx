@@ -2,11 +2,15 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import Intro from './Intro';
 import ProfessionalServices from './ProfessionalServices';
 
 const WhatWeDo = () => {
   return (
     <div>
+      {/* New Intro Section */}
+      <Intro />
+      
       {/* Professional Services Section */}
       <ProfessionalServices />
       

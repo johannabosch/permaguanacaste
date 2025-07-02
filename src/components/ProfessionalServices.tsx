@@ -102,7 +102,7 @@ const ProfessionalServices = () => {
   const y = useTransform(scrollYProgress, [0, 1], [-50, 50]);
 
   return (
-    <section ref={containerRef} className="py-20 bg-gradient-to-b from-white to-green-50 overflow-hidden">
+    <section ref={containerRef} className="py-20 bg-white overflow-hidden">
       <div className="container mx-auto px-4 lg:px-8">
         
         {/* Section Header */}
@@ -113,10 +113,10 @@ const ProfessionalServices = () => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl lg:text-6xl font-maname tracking-wide text-green-800 mb-6">
+          <h2 className="text-3xl lg:text-4xl font-maname tracking-wide text-green-800 mb-6">
             Professional Services
           </h2>
-          <p className="text-xl lg:text-2xl font-anicizer italic text-gray-600 tracking-widest max-w-4xl mx-auto">
+          <p className="text-lg lg:text-xl font-anicizer italic text-gray-600 tracking-widest max-w-4xl mx-auto">
             Comprehensive permaculture solutions tailored to your unique landscape and vision
           </p>
         </motion.div>

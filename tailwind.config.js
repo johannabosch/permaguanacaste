@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'luxury': ['Playfair Display', 'serif'],
+        'luxury': ['DM Sans', 'sans-serif'],
         'elegant': ['Cormorant Garamond', 'serif'],
       },
     },
