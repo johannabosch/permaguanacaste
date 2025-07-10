@@ -49,8 +49,9 @@ body {
 }
 
 .font-luxury {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Red Hat Display", sans-serif;
   font-optical-sizing: auto;
+  font-weight: 300;
   font-style: normal;
 }
 

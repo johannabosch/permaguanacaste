@@ -48,10 +48,32 @@ const Hero = () => {
     
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
       
       // Calculate text movement - starts at 320px and moves up with scroll
       const maxOffset = 320; // Starting position
-      const scrollThreshold = window.innerHeight * 2.3; // Slightly reduced threshold
+      
+      // Get actual hero element height instead of using fixed calculations
+      const heroElement = heroRef.current;
+      if (!heroElement) return;
+      
+      const heroHeight = heroElement.offsetHeight;
+      
+      // Calculate a more content-aware threshold based on screen size
+      const screenWidth = window.innerWidth;
+      let scrollThreshold;
+      
+      if (screenWidth < 768) {
+        // Mobile: 80% of hero height
+        scrollThreshold = heroHeight * 0.8;
+      } else if (screenWidth < 1024) {
+        // Medium screens: 90% of hero height (more content to scroll through)
+        scrollThreshold = heroHeight * 0.9;
+      } else {
+        // Large screens: 95% of hero height (even more content)
+        scrollThreshold = heroHeight * 0.95;
+      }
+      
       const scrollProgress = Math.min(currentScrollY / scrollThreshold, 1);
       const newOffset = maxOffset * (1 - scrollProgress);
       
@@ -65,23 +87,71 @@ const Hero = () => {
       
       // If text animation isn't complete, prevent scrolling past hero
       if (!textAnimationComplete && currentScrollY > scrollThreshold) {
-        window.scrollTo(0, scrollThreshold);
+        window.scrollTo({ top: scrollThreshold, behavior: 'auto' });
       }
     };
 
     // Prevent scroll momentum on mobile
     const preventScrollBounce = (e: TouchEvent) => {
-      if (!textAnimationComplete && window.scrollY >= window.innerHeight * 2.3) {
+      const heroElement = heroRef.current;
+      if (!heroElement) return;
+      
+      const heroHeight = heroElement.offsetHeight;
+      const screenWidth = window.innerWidth;
+      let scrollThreshold;
+      
+      if (screenWidth < 768) {
+        scrollThreshold = heroHeight * 0.8;
+      } else if (screenWidth < 1024) {
+        scrollThreshold = heroHeight * 0.9;
+      } else {
+        scrollThreshold = heroHeight * 0.95;
+      }
+      
+      if (!textAnimationComplete && window.scrollY >= scrollThreshold) {
         e.preventDefault();
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    document.addEventListener('touchmove', preventScrollBounce, { passive: false });
+    // Prevent wheel scrolling past hero
+    const preventWheelScroll = (e: WheelEvent) => {
+      const heroElement = heroRef.current;
+      if (!heroElement) return;
+      
+      const heroHeight = heroElement.offsetHeight;
+      const screenWidth = window.innerWidth;
+      let scrollThreshold;
+      
+      if (screenWidth < 768) {
+        scrollThreshold = heroHeight * 0.8;
+      } else if (screenWidth < 1024) {
+        scrollThreshold = heroHeight * 0.9;
+      } else {
+        scrollThreshold = heroHeight * 0.95;
+      }
+      
+      if (!textAnimationComplete && window.scrollY >= scrollThreshold && e.deltaY > 0) {
+        e.preventDefault();
+      }
+    };
+
+    // Add a small delay to ensure DOM is ready
+    const timeoutId = setTimeout(() => {
+      window.addEventListener('scroll', handleScroll);
+      document.addEventListener('touchmove', preventScrollBounce, { passive: false });
+      document.addEventListener('wheel', preventWheelScroll, { passive: false });
+      window.addEventListener('resize', handleScroll); // Recalculate on resize
+      
+      // Initial call to set correct state
+      handleScroll();
+    }, 100);
     
     return () => {
+      clearTimeout(timeoutId);
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('touchmove', preventScrollBounce);
+      document.removeEventListener('wheel', preventWheelScroll);
+      window.removeEventListener('resize', handleScroll);
     };
   }, [isClient, textAnimationComplete]);
 
@@ -105,7 +175,7 @@ const Hero = () => {
   }, [rotatingImages.length]);
 
   return (
-    <section ref={heroRef} className="h-[320vh] lg:h-[180vh] w-full relative">
+    <section ref={heroRef} className="h-[150vh] md:h-[200vh] lg:h-[160vh] w-full relative">
       {/* Video Background - Fixed */}
       <div className="fixed inset-0 w-full h-screen">
         <video
@@ -119,23 +189,28 @@ const Hero = () => {
         >
           <source src="/images/waterfall.mp4" type="video/mp4" />
         </video>
+        
         {/* Black fade gradient overlay from top */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-transparent pointer-events-none"></div>
       </div>
 
       {/* Rotating Images and Hero Logo - with scroll effect */}
       <div 
-        className="absolute inset-0 flex flex-col items-start justify-start pl-4 lg:pl-8 pt-16"
+        className="absolute inset-0 flex flex-col pl-2 lg:pl-8 pt-16"
         style={{
-          marginTop: isClient && window.innerWidth < 1024 ? `${textOffset}px` : '0px',
+          marginTop: isClient ? `${textOffset}px` : '0px',
           transition: textAnimationComplete ? 'none' : 'margin-top 0.1s ease-out'
         }}
       >
-        <div className="mb-2 w-full max-w-none lg:max-w-6xl flex justify-center">
+        {/* Rotating images and PERMAGUANACASTE */}
+        <div className="flex flex-col items-center justify-center ml-8 lg:ml-10 mt-[1vw]">
+
+          <div className="w-full max-w-none lg:max-w-6xl flex justify-center lg:justify-center">
           <div 
-            className={`w-16 h-16 lg:w-16 lg:h-16 relative transition-transform duration-300 ease-in-out ${
+            className={`w-16 h-16 lg:w-20 lg:h-20 relative transition-transform duration-300 ease-in-out ${
               isSpinning ? 'rotate-180 scale-110' : 'rotate-0 scale-100'
             }`}
+          
           >
             <Image
               src={rotatingImages[currentImageIndex]}
@@ -146,66 +221,47 @@ const Hero = () => {
             />
           </div>
         </div>
-        
-        {/* Hero Logo */}
-        <div className="w-full max-w-none lg:max-w-6xl">
-          <div className="max-w-md lg:max-w-2xl mx-auto">
+
+
+            {/* Hero Logo */}
+            <div className="lg:justify-center max-w-md lg:max-w-lg">
             <Image
-              src="/images/hero-perma-mobile.png"
+              src="/images/hero-perma.png"
               alt="Permaguanacaste"
-              width={1500}
-              height={375}
+                  width={400}
+                  height={200}
               className="w-full h-auto drop-shadow-2xl"
               priority
             />
           </div>
         </div>
-        
+
         {/* Description Text with extra spacing */}
-        <div className="w-full max-w-none lg:max-w-6xl mt-4 mb-[32rem] lg:mb-96 space-y-12 px-8 lg:px-16">
-          <p className="text-white text-3xl lg:text-5xl font-luxury leading-relaxed">
-            We are landscape and permaculture experts rooted in the wild heart of the rainforest.
-          </p>
-          
-          <div className="space-y-2">
-            <p className="text-white text-xl lg:text-4xl font-luxury leading-relaxed">
-              Guided by nature's rhythms—like the timeless flow of a Guanacaste waterfall—we nurture regenerative landscapes, crafting ecosystems that breathe, grow, and sustain over generations.
+        <div className="w-full max-w-none lg:max-w-6xl mt-0 mb-[40rem] lg:mb-[30rem] px-8 lg:px-24 lg:pr-24">
+          <div className="space-y-12">
+            <div className="flex flex-col items-left">            
+              <p className="text-white text-left text-3xl mt-[80] lg:mt-[40px] lg:text-5xl font-luxury mb-[-10] lg:max-w-3xl">  
+              Where water shapes the land, <br></br> we grow systems that thrive. </p>
 
+              <div className=" lg:block w-full h-px bg-[#dbd2ce] mb-5 mt-5"></div>
 
-            </p>
-          </div>
-          
-          
-          <div>
-            <p className="text-white text-xl lg:text-3xl font-luxury leading-relaxed text-left lg:text-justify">
-              <span className="font-bold">We guide landowners in transforming their properties into vibrant, self-sustaining ecosystems.</span> Whether you're stewarding a homestead, vacation retreat, or rewilding project, we help shape spaces that are not only beautiful, but ecologically resilient and deeply nourishing.
-            </p>
-          </div>
-          
-          <div>
-            <p className="text-white text-xl lg:text-3xl font-luxury leading-relaxed text-left lg:text-justify">
-              Our approach blends classic permaculture principles, like water harvesting, companion planting, and soil regeneration, with the grounded, place-based knowledge of Guanacaste's people, who have lived in harmony with this land for centuries.
-            </p>
-          </div>
-          
-          <div>
-            <p className="text-white text-xl lg:text-3xl font-luxury leading-relaxed text-left lg:text-justify">
-              We don't believe in one-size-fits-all templates. Instead, we listen: to your needs, to the microclimate, to the rhythms of the seasons. The result is a site-specific plan that evolves organically over time—slow, intentional, and rooted in abundance.
-            </p>
-          </div>
-          
+              <p className="text-white text-xl lg:text-3xl font-luxury mt-0 text-left lg:text-justify">
+                <span className="italic">
+                  Design, guidance, and the tools to bring your land to life.
+                </span>
+              </p>
+            </div>
 
+            <div>
+              <p className="text-white text-2xl text-left lg:max-w-4xl lg:text-4xl font-luxury  ">
+              We are permaculture and landscape design specialists based in Guanacaste, Costa Rica.
+              We support landowners in developing ecologically sound, self-sustaining systems—integrating traditional ecological knowledge with contemporary regenerative design principles to foster resilience, biodiversity, and long-term landscape health.</p>
+            </div>
+          </div>
         </div>
+
       </div>
       
-      {/* Scroll indicator - only show when text animation is complete */}
-      {textAnimationComplete && (
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
-          </div>
-        </div>
-      )}
     </section>
   );
 };

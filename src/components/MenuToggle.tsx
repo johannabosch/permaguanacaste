@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const Path = (props: any) => (
   <motion.path
     fill="transparent"
-    strokeWidth="3"
+    strokeWidth="2.5"
     stroke="#6B7280"
     strokeLinecap="round"
     {...props}
@@ -18,10 +18,11 @@ export function MenuToggle({ toggle }: MenuToggleProps) {
   return (
     <button
       onClick={toggle}
-      className="absolute top-4 right-4 z-50 w-12 h-12 rounded-full bg-transparent border-none cursor-pointer outline-none flex items-center justify-center"
+      className="absolute top-8 right-4 z-50 w-10 h-10 rounded-full 
+      bg-[#DBD2CD] backdrop-blur-sm border border-white/20 cursor-pointer outline-none flex items-center justify-center hover:bg-white/20 transition-all duration-200"
       aria-label="Toggle menu"
     >
-      <svg width="23" height="23" viewBox="0 0 23 23">
+      <svg width="20" height="20" viewBox="0 0 23 23" className="flex-shrink-0">
         <Path
           variants={{
             closed: { d: "M 2 2.5 L 20 2.5" },

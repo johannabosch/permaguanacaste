@@ -5,30 +5,53 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import MobileSidebar from './MobileSidebar';
+import { navigationItems } from '@/config/navigation';
 
 const Header = () => {
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
+  const [isOverWhiteBackground, setIsOverWhiteBackground] = useState(false);
   
   // Framer Motion scroll tracking
   const { scrollY } = useScroll();
   
-  // Track scroll position to show/hide header
+  // Track scroll position to show/hide header and detect white background sections
   useEffect(() => {
     const updateHeaderVisibility = () => {
-      const heroHeight = window.innerHeight; // 100vh
-      setShowHeader(window.scrollY > heroHeight * 0.9); // Show when 90% past hero
+      const currentScrollY = window.scrollY;
+      
+      // Show header after scrolling down 50px
+      setShowHeader(currentScrollY > 50);
+      
+      // Detect if we're over white background sections
+      // The white background starts after the hero section
+      // We need to get the hero height to determine when white sections begin
+      const heroElement = document.querySelector('section'); // First section should be hero
+      if (heroElement) {
+        const heroHeight = heroElement.offsetHeight;
+        // Consider we're over white background when we've scrolled past most of the hero
+        // and the header is positioned over white content
+        const whiteBackgroundStart = heroHeight * 0.8; // Start detecting white background at 80% of hero height
+        setIsOverWhiteBackground(currentScrollY > whiteBackgroundStart);
+      }
     };
 
     window.addEventListener('scroll', updateHeaderVisibility);
-    return () => window.removeEventListener('scroll', updateHeaderVisibility);
+    window.addEventListener('resize', updateHeaderVisibility); // Handle screen size changes
+    
+    // Initial call
+    updateHeaderVisibility();
+    
+    return () => {
+      window.removeEventListener('scroll', updateHeaderVisibility);
+      window.removeEventListener('resize', updateHeaderVisibility);
+    };
   }, []);
   
   // Transform scroll values to animation properties
   const headerBackground = useTransform(
     scrollY,
     [0, 100],
-    ["rgba(255, 255, 255, 0.95)", "rgba(255, 255, 255, 0.95)"]
+    ["rgba(255, 255, 255, 0.1)", "rgba(255, 255, 255, 0.1)"]
   );
   
   const headerHeight = useTransform(
@@ -37,12 +60,10 @@ const Header = () => {
     [100, 100]
   );
   
-  // Change to dark grey
-  const textColor = useTransform(
-    scrollY,
-    [0, 100],
-    ["rgba(75, 85, 99, 1)", "rgba(75, 85, 99, 1)"] // dark grey
-  );
+  // Dynamic text color based on background
+  const getCurrentTextColor = () => {
+    return isOverWhiteBackground ? "rgba(0, 0, 0, 1)" : "rgba(255, 255, 255, 1)";
+  };
 
   // Logo always visible when header shows
   const logoOpacity = useTransform(
@@ -109,21 +130,21 @@ const Header = () => {
         <>
           {/* Mobile Header - Shows when scrolled past hero */}
           <motion.header 
-            className="lg:hidden fixed top-0 left-0 right-0 z-40 px-4 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg"
+            className="lg:hidden fixed top-5 left-0 right-0 z-40 px-4 bg-transparent"
             variants={mobileHeaderVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
           >
             <div className="flex items-center justify-between w-full h-16">
-              {/* Logo on the left */}
+              {/* Logo on the left - bigger */}
               <Link href="/" className="flex items-center">
                 <Image
                   src="/images/permalogo.png"
                   alt="Permaguanacaste Logo"
-                  width={120}
-                  height={40}
-                  className="h-8 w-auto"
+                  width={240}
+                  height={80}
+                  className="h-16 w-auto"
                 />
               </Link>
               
@@ -134,9 +155,8 @@ const Header = () => {
 
           {/* Desktop Header - Shows when scrolled past hero */}
           <motion.header 
-            className="hidden lg:block fixed top-0 left-0 right-0 z-50 px-4 lg:px-8 backdrop-blur-md border-b border-white/10 shadow-lg"
+            className="hidden lg:block fixed top-0 left-0 right-0 z-50 px-4 lg:px-8 bg-transparent"
             style={{
-              background: headerBackground,
               height: headerHeight,
             }}
             variants={headerVariants}
@@ -157,9 +177,9 @@ const Header = () => {
                     <Image
                       src="/images/permalogo.png"
                       alt="Permaguanacaste Logo"
-                      width={220}
-                      height={75}
-                      className="h-16 w-auto lg:h-20 transition-all duration-500"
+                      width={280}
+                      height={95}
+                      className="h-20 w-auto lg:h-24 transition-all duration-500"
                     />
                   </motion.div>
                 </Link>
@@ -167,102 +187,98 @@ const Header = () => {
               
               {/* Navigation buttons - Desktop Only */}
               <motion.div 
-                className="hidden lg:flex items-baseline space-x-4"
+                className="hidden lg:flex items-center space-x-1 px-6 py-3 rounded-full transition-all duration-500 ease-out"
+                style={{
+                  backgroundColor: isOverWhiteBackground ? 'rgba(255, 255, 255, 0.95)' : 'transparent',
+                  backdropFilter: isOverWhiteBackground ? 'blur(8px)' : 'none',
+                  boxShadow: isOverWhiteBackground ? '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' : 'none',
+                }}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                <motion.div style={{ color: textColor }}>
-                  <Link href="/about" className="hover:opacity-70 px-4 transition-all font-maname tracking-widest">
-                    ABOUT
-                  </Link>
-                </motion.div>
-                
-                {/* Services Dropdown */}
-                <div 
-                  className="relative group"
-                  onMouseEnter={() => setIsServicesOpen(true)}
-                  onMouseLeave={() => setIsServicesOpen(false)}
-                >
-                  <motion.div 
-                    className="hover:opacity-70 px-4 transition-all font-maname tracking-widest flex items-center cursor-pointer"
-                    style={{ color: textColor }}
-                  >
-                    SERVICES
-                    <svg 
-                      className={`w-3 h-3 ml-1 transition-transform duration-200 ${isServicesOpen ? 'rotate-180' : ''}`} 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </motion.div>
-                  
-                  <div className={`absolute top-full left-0 mt-2 w-72 bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/20 py-3 z-50 transition-all duration-200 ${isServicesOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-                    <Link 
-                      href="/services/food-systems" 
-                      className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50"
-                      onClick={() => setIsServicesOpen(false)}
-                    >
-                      FOOD SYSTEMS
-                    </Link>
-                    <Link 
-                      href="/services/soil-health" 
-                      className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50"
-                      onClick={() => setIsServicesOpen(false)}
-                    >
-                      SOIL HEALTH
-                    </Link>
-                    <Link 
-                      href="/services/house-design" 
-                      className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50"
-                      onClick={() => setIsServicesOpen(false)}
-                    >
-                      HOUSE DESIGN
-                    </Link>
-                    <Link 
-                      href="/services/aquaculture" 
-                      className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm border-b border-gray-100/50"
-                      onClick={() => setIsServicesOpen(false)}
-                    >
-                      AQUACULTURE
-                    </Link>
-                    <Link 
-                      href="/services/pond-swimming-pool-design" 
-                      className="block px-6 py-3 text-gray-800 hover:bg-green-50/80 hover:text-green-800 transition-all duration-200 font-maname tracking-wide uppercase text-sm"
-                      onClick={() => setIsServicesOpen(false)}
-                    >
-                      POND & SWIMMING POOL DESIGN
-                    </Link>
-                  </div>
-                </div>
-                
-                <motion.div style={{ color: textColor }}>
-                  <Link href="/learn" className="hover:opacity-70 px-4 transition-all font-maname tracking-widest">
-                    LEARN
-                  </Link>
-                </motion.div>
-                
-                <motion.div style={{ color: textColor }}>
-                  <Link href="/projects" className="hover:opacity-70 px-4 transition-all font-maname tracking-widest">
-                    PROJECTS
-                  </Link>
-                </motion.div>
-                
-                <motion.div 
-                  style={{ 
-                    color: textColor,
-                    borderColor: textColor
-                  }}
-                >
-                  <Link 
-                    href="/contact" 
-                    className="bg-transparent border hover:bg-gray-600 hover:text-white px-4 py-2 rounded-full transition-all font-maname tracking-widest flex items-center justify-center min-h-[40px]"
-                  >
-                    CONTACT
-                  </Link>
-                </motion.div>
+                {navigationItems.map((item) => {
+                  if (item.label === 'CONTACT') {
+                    // Contact button (always visible)
+                    return (
+                      <motion.div 
+                        key={item.href}
+                        initial={{ opacity: 1 }}
+                        animate={{ opacity: 1 }}
+                      >
+                        <Link 
+                          href={item.href} 
+                          className="border px-4 py-2 rounded-full transition-all duration-300 ease-out font-luxury tracking-widest flex items-center justify-center min-h-[40px]"
+                          style={{
+                            backgroundColor: isOverWhiteBackground ? '#599559' : 'transparent',
+                            borderColor: isOverWhiteBackground ? '#599559' : 'white',
+                            color: 'white'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (isOverWhiteBackground) {
+                              e.currentTarget.style.backgroundColor = '#4a7c4a';
+                              e.currentTarget.style.borderColor = '#4a7c4a';
+                            } else {
+                              e.currentTarget.style.backgroundColor = 'white';
+                              e.currentTarget.style.color = 'black';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (isOverWhiteBackground) {
+                              e.currentTarget.style.backgroundColor = '#599559';
+                              e.currentTarget.style.borderColor = '#599559';
+                              e.currentTarget.style.color = 'white';
+                            } else {
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                              e.currentTarget.style.color = 'white';
+                            }
+                          }}
+                        >
+                          {item.label}
+                        </Link>
+                      </motion.div>
+                    );
+                  } else {
+                    // Regular navigation items (only visible when white background appears)
+                    return (
+                      <motion.div 
+                        key={item.href}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ 
+                          opacity: isOverWhiteBackground ? 1 : 0,
+                          x: isOverWhiteBackground ? 0 : -10
+                        }}
+                        transition={{ duration: 0.3, delay: isOverWhiteBackground ? 0.1 : 0 }}
+                        style={{ 
+                          display: isOverWhiteBackground ? 'block' : 'none'
+                        }}
+                      >
+                        <Link 
+                          href={item.href} 
+                          className="px-4 py-2 transition-all duration-300 ease-out font-luxury tracking-widest rounded-full"
+                          style={{
+                            color: isOverWhiteBackground ? '#374151' : 'white',
+                          }}
+                          onMouseEnter={(e) => {
+                            if (isOverWhiteBackground) {
+                              e.currentTarget.style.color = '#599559';
+                              e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.05)';
+                            } else {
+                              e.currentTarget.style.color = '#d1d5db';
+                              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = isOverWhiteBackground ? '#374151' : 'white';
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          }}
+                        >
+                          {item.label}
+                        </Link>
+                      </motion.div>
+                    );
+                  }
+                })}
               </motion.div>
             </div>
           </motion.header>

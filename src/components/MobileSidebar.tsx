@@ -8,7 +8,7 @@ import { Navigation } from "@/components/Navigation";
 
 const sidebar: Variants = {
   open: (height = 1000) => ({
-    clipPath: `circle(${height * 2 + 200}px at calc(100% - 40px) 40px)`,
+    clipPath: `inset(0 0 0 0)`,
     transition: {
       type: "spring" as const,
       stiffness: 20,
@@ -16,7 +16,7 @@ const sidebar: Variants = {
     }
   }),
   closed: {
-    clipPath: "circle(30px at calc(100% - 40px) 40px)",
+    clipPath: `inset(0 0 100% 100%)`,
     transition: {
       delay: 0.5,
       type: "spring" as const,
@@ -29,7 +29,7 @@ const sidebar: Variants = {
 export default function MobileSidebar() {
   const [isOpen, toggleOpen] = useCycle(false, true);
   const containerRef = useRef<HTMLElement>(null);
-  const { height } = useDimensions(containerRef);
+  const { height } = useDimensions(containerRef as React.RefObject<HTMLElement>);
 
   return (
     <motion.nav
