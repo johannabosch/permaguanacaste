@@ -18,21 +18,7 @@ interface Service {
   benefits: string[];
 }
 
-  // Text animations
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 60 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.2,
-        duration: 0.8,
-        ease: "easeOut" as const
-      }
-    })
-  };
-
-const Services = () => {
+const AboutServices = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeService, setActiveService] = useState<number | null>(null);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
@@ -46,6 +32,10 @@ const Services = () => {
     target: containerRef,
     offset: ["start end", "end start"]
   });
+
+  // Subtle parallax effects
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -30]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 50]);
 
   // Text animations
   const fadeInUp = {
@@ -72,17 +62,17 @@ const Services = () => {
   };
 
   const services: Service[] = [
-    {
-      id: 'land-selection',
-      title: 'Pre-Purchase Guidance',
-      subtitle: 'Start your journey with confidence.',
-      description: 'For prospective landowners seeking to establish regenerative homesteads, reforested retreats, or thriving food forests in Costa Rica, we provide comprehensive pre-purchase guidance to ensure your investment aligns with your vision and values. Our deep local expertise helps you understand the ecological, logistical, and legal realities of each property, empowering you to make informed decisions and build with confidence from day one.',
-      backgroundImage: '/images/land-selection.png',
-      link: '/services/land-selection',
-      features: ['On-site ecological walk-through', 'Resource & constraint analysis (soil, water, access, slope)', 'Preliminary design potential review', 'Local considerations & permitting insights'],
-      process: ['Initial consultation & vision clarification', 'Property visit & comprehensive assessment', 'Ecological & logistical analysis', 'Detailed report with recommendations'],
-      benefits: ['Informed land purchase decisions', 'Risk mitigation', 'Design potential assessment', 'Local expertise & guidance']
-    },
+    // {
+    //   id: 'land-selection',
+    //   title: 'Pre-Purchase Guidance',
+    //   subtitle: 'Start your journey with confidence.',
+    //   description: 'For prospective landowners seeking to establish regenerative homesteads, reforested retreats, or thriving food forests in Costa Rica, we provide comprehensive pre-purchase guidance to ensure your investment aligns with your vision and values. Our deep local expertise helps you understand the ecological, logistical, and legal realities of each property, empowering you to make informed decisions and build with confidence from day one.',
+    //   backgroundImage: '/images/land-selection.png',
+    //   link: '/services/land-selection',
+    //   features: ['On-site ecological walk-through', 'Resource & constraint analysis (soil, water, access, slope)', 'Preliminary design potential review', 'Local considerations & permitting insights'],
+    //   process: ['Initial consultation & vision clarification', 'Property visit & comprehensive assessment', 'Ecological & logistical analysis', 'Detailed report with recommendations'],
+    //   benefits: ['Informed land purchase decisions', 'Risk mitigation', 'Design potential assessment', 'Local expertise & guidance']
+    // },
     {
         id: 'masterplan',
         title: 'Masterplan Design',
@@ -94,17 +84,17 @@ const Services = () => {
         process: ['On-site consultation & landscape reading', 'Ecological & infrastructural planning', 'Client collaboration & design revisions', 'Final plan delivery with phased roadmap'],
         benefits: ['Maximized land use efficiency', 'Integrated water management', 'Sustainable food production', 'Long-term cost savings']
       },
-    {
-      id: 'site-assessments',
-      title: 'Site Assessments',
-      subtitle: 'Ecological Landscape Evaluation',
-      description: 'Get to know your land before breaking ground. We offer in-depth assessments that uncover your site\'s natural assets and constraints to guide regenerative design.',
-      backgroundImage: '/images/site-assessment.png',
-      link: '/services/assessments',
-      features: ['Topography & hydrology review', 'Soil health diagnostics', 'Climate profiling', 'Mapping of key resources'],
-      process: ['On-site walk-through & observation', 'Soil and water testing', 'Climate and microclimate analysis', 'Comprehensive findings & recommendations report'],
-      benefits: ['Informed decision making', 'Risk mitigation', 'Optimal system placement', 'Foundation for all future development']
-    },
+    // {
+    //   id: 'site-assessments',
+    //   title: 'Site Assessments',
+    //   subtitle: 'Ecological Landscape Evaluation',
+    //   description: 'Get to know your land before breaking ground. We offer in-depth assessments that uncover your site\'s natural assets and constraints to guide regenerative design.',
+    //   backgroundImage: '/images/site-assessment.png',
+    //   link: '/services/assessments',
+    //   features: ['Topography & hydrology review', 'Soil health diagnostics', 'Climate profiling', 'Mapping of key resources'],
+    //   process: ['On-site walk-through & observation', 'Soil and water testing', 'Climate and microclimate analysis', 'Comprehensive findings & recommendations report'],
+    //   benefits: ['Informed decision making', 'Risk mitigation', 'Optimal system placement', 'Foundation for all future development']
+    // },
     {
       id: 'food-systems',
       title: 'Regenerative Food Systems',
@@ -162,109 +152,156 @@ const Services = () => {
     }
   ];
 
-  const y = useTransform(scrollYProgress, [0, 1], [-50, 50]);
-
   return (
-    <section id="services" ref={containerRef} className="bg-white overflow-hidden min-h-screen flex items-center justify-center py-20">
-      <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
-        
-        {/* Section Header */}
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              custom={0}
-              variants={fadeInUp}
-              className="flex items-center justify-center space-x-3">
-            <div className="flex flex-col items-center">            
-              <p className="text-black text-center text-3xl mt-[80] lg:mt-[40px] lg:text-5xl font-luxury font-black mb-[-10] lg:max-w-3xl">  
-              Our Services </p>
+    <section 
+      ref={containerRef} 
+      className="relative overflow-hidden bg-gradient-to-b from-white via-white to-[#599559]"
+    >
 
-              <div className=" lg:block w-full h-px bg-black mb-5 mt-5"></div>
-            </div>
+      {/* Subtle Background Elements */}
+      <motion.div
+        className="absolute top-20 right-10 w-64 h-64 bg-green-200/10 rounded-full blur-3xl"
+        style={{ y: y1 }}
+      />
+      
+      <motion.div
+        className="absolute bottom-20 left-10 w-80 h-80 bg-green-300/8 rounded-full blur-3xl"
+        style={{ y: y2 }}
+      />
 
-            </motion.div>
-          
-          <p className="text-xl lg:text-2xl font-luxury italic text-gray-600 tracking-widest max-w-4xl mx-auto">
-            Holistic permaculture and landscape design rooted in the ecology and culture of Costa Rica. We offer a range of tailored services that honour the unique rhythms of your land.
-          </p>
-        </motion.div>
-
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {services.map((service, index) => (
-            <motion.div
-              key={service.id}
-              className="group relative cursor-pointer"
-              initial={{ opacity: 0, y: 100 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              onHoverStart={() => setActiveService(index)}
-              onHoverEnd={() => setActiveService(null)}
-              onClick={() => handleServiceClick(service)}
-            >
-              <div className="relative overflow-hidden rounded-3xl bg-white shadow-lg hover:shadow-2xl transition-all duration-700 h-96 border border-stone-100">
-                
-                {/* Background Image */}
-                <div className="absolute inset-0">
-                  <Image
-                    src={service.backgroundImage}
-                    alt={service.title}
-                    fill
-                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-800/40 to-transparent"></div>
-                </div>
-
-                {/* Content Overlay */}
-                <div className="relative z-10 h-full flex flex-col justify-end p-8">
-                  
-                  {/* Bottom Content */}
-                  <div>
-                    <h3 className="text-2xl lg:text-3xl font-luxury font-medium tracking-wide text-white mb-4 leading-tight">
-                      {service.title}
-                    </h3>
-                    
-                    {/* Call to Action */}
-                    <div className="flex items-center text-emerald-300 font-luxury tracking-wider text-base lg:text-lg group-hover:text-emerald-200 transition-colors duration-300">
-                      <span className="mr-2">Explore Service</span>
-                      <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Animated Border */}
+      <div className="relative z-10">
+        {/* About Section */}
+        <div id="about">
+          <div className="container mt-20 mx-auto px-4 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-16 items-center">
+              
+              {/* Text Content - Full Width */}
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="mt-10 max-w-4xl mx-auto text-center"
+              >
+                {/* Connecting tagline */}
                 <motion.div
-                  className="absolute inset-0 border-2 border-transparent rounded-3xl"
-                  animate={activeService === index ? { borderColor: 'rgba(52, 211, 153, 0.4)' } : { borderColor: 'transparent' }}
-                  transition={{ duration: 0.4 }}
-                />
+                  custom={0}
+                  variants={fadeInUp}
+                  className="flex items-center justify-center space-x-3">
+                <div className="flex flex-col items-center">            
+                  <p className="text-black text-center text-3xl mt-[10px] lg:text-5xl font-luxury font-black lg:max-w-3xl">  
+                  Your Vision, Our Expertise </p>
 
-              </div>
-            </motion.div>
-          ))}
+                  <div className=" lg:block w-full h-px bg-black mb-5 mt-5"></div>
+                </div>
+                </motion.div>
+
+                {/* Description */}
+                <motion.p
+                  custom={2}
+                  variants={fadeInUp}
+                  className="text-lg lg:text-2xl text-black leading-relaxed font-luxury max-w-full mx-[1rem]">
+                  We blend classic permaculture principles, like water harvesting, companion planting, and soil regeneration, with the grounded, place-based knowledge of Guanacaste's people, who have lived in harmony with this land for centuries.
+                  </motion.p>
+              </motion.div>
+
+            </div>
+          </div>
         </div>
 
-        {/* Floating Elements */}
-        <motion.div
-          className="absolute top-20 left-10 w-32 h-32 bg-green-200/10 rounded-full blur-xl"
-          style={{ y }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-10 w-40 h-40 bg-green-300/10 rounded-full blur-xl"
-          style={{ y: useTransform(scrollYProgress, [0, 1], [50, -50]) }}
-        />
+        {/* Services Section */}
+        <div id="services" className="min-h-screen flex items-center justify-center pt-10 pb-5">
+          <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
+            
+            {/* Section Header */}
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  custom={0}
+                  variants={fadeInUp}
+                  className="flex items-center justify-center space-x-3">
 
+                <div className="flex flex-col items-center bg-[#599559]/80 backdrop-blur-sm rounded-2xl pb-5 px-12 max-w-3xl">            
+                  <p className="text-white text-center text-4xl mt-[40px] lg:mt-[20px] lg:text-5xl font-luxury font-black mb-2 lg:max-w-3xl">  
+                  Our Services </p>
+
+                  <div className="w-full h-px bg-white mb-5"></div>
+                  
+                  <p className="text-xl lg:text-2xl font-luxury italic text-white tracking-widest max-w-4xl">
+                    We offer a range of services that honour the unique rhythms of your land.
+                  </p>
+                </div>
+
+                </motion.div>
+            </motion.div>
+
+            {/* Services Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+              {services.map((service, index) => (
+                <motion.div
+                  key={service.id}
+                  className="group relative cursor-pointer pointer-events-auto"
+                  initial={{ opacity: 0, y: 100 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  onHoverStart={() => setActiveService(index)}
+                  onHoverEnd={() => setActiveService(null)}
+                  onClick={() => handleServiceClick(service)}
+                >
+                  <div className="relative overflow-hidden rounded-3xl bg-white shadow-lg hover:shadow-2xl transition-all duration-700 h-70 lg:h-96 border border-stone-100 cursor-pointer">
+                    
+                    {/* Background Image */}
+                    <div className="absolute inset-0 pointer-events-none">
+                      <Image
+                        src={service.backgroundImage}
+                        alt={service.title}
+                        fill
+                        className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-800/40 to-transparent"></div>
+                    </div>
+
+                    {/* Content Overlay */}
+                    <div className="relative z-10 h-full flex flex-col justify-end p-8 pointer-events-none">
+                      
+                      {/* Bottom Content */}
+                      <div>
+                        <h3 className="text-2xl lg:text-3xl font-luxury font-medium tracking-wide text-white mb-4 leading-tight">
+                          {service.title}
+                        </h3>
+                        
+                        {/* Call to Action */}
+                        <div className="flex items-center text-emerald-300 font-luxury tracking-wider text-base lg:text-lg group-hover:text-emerald-200 transition-colors duration-300">
+                          <span className="mr-2">Explore Service</span>
+                          <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Animated Border */}
+                    <motion.div
+                      className="absolute inset-0 border-2 border-transparent rounded-3xl pointer-events-none"
+                      animate={activeService === index ? { borderColor: 'rgba(52, 211, 153, 0.4)' } : { borderColor: 'transparent' }}
+                      transition={{ duration: 0.4 }}
+                    />
+
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+          </div>
+        </div>
       </div>
 
       {/* Service Detail Modal */}
@@ -376,4 +413,4 @@ const Services = () => {
   );
 };
 
-export default Services; 
+export default AboutServices; 

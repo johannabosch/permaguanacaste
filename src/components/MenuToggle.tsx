@@ -19,7 +19,7 @@ export function MenuToggle({ toggle }: MenuToggleProps) {
     <button
       onClick={toggle}
       className="absolute top-8 right-4 z-50 w-10 h-10 rounded-full 
-      bg-[#DBD2CD] backdrop-blur-sm border border-white/20 cursor-pointer outline-none flex items-center justify-center hover:bg-white/20 transition-all duration-200"
+      bg-white backdrop-blur-sm cursor-pointer outline-none flex items-center justify-center hover:bg-white/90 transition-all duration-200"
       aria-label="Toggle menu"
     >
       <svg width="20" height="20" viewBox="0 0 23 23" className="flex-shrink-0">

@@ -14,6 +14,16 @@
   --text-green-light: #bbf7d0; /* green-200 */
 }
 
+/* Prevent horizontal scrolling on mobile */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -28,9 +38,11 @@
     --background: #0a0a0a;
     --foreground: #ededed;
     --text-primary: #ededed;
-    --text-secondary: #d1d5db; /* lighter gray for dark mode */
-    --text-tertiary: #f3f4f6; /* even lighter gray for dark mode */
-    --text-muted: #9ca3af; /* muted gray for dark mode */
+    --text-secondary: #d1d5db; /* gray-300 */
+    --text-tertiary: #f3f4f6; /* gray-100 */
+    --text-muted: #9ca3af; /* gray-400 */
+    --text-green-primary: #22c55e; /* green-500 */
+    --text-green-light: #166534; /* green-800 */
   }
 }
 
@@ -57,6 +69,10 @@ body {
 
 .font-elegant {
   font-family: 'Maname', serif;
+}
+
+* {
+  border-color: var(--foreground);
 }
 
 /* Text Color Utility Classes */

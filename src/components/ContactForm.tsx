@@ -22,8 +22,11 @@ const ContactForm = () => {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    console.log('Form submission started');
+    console.log('Form data:', Object.fromEntries(formData));
+
     try {
-      const response = await fetch('https://formspree.io/f/myzjrwvv', {
+      const response = await fetch('https://formspree.io/f/mjkoagea', {
         method: 'POST',
         body: formData,
         headers: {
@@ -31,21 +34,53 @@ const ContactForm = () => {
         }
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+
       if (response.ok) {
+        console.log('Form submitted successfully');
         setIsSubmitted(true);
       } else {
-        throw new Error('Form submission failed');
+        // Try with JSON format as fallback
+        console.log('FormData failed, trying JSON format...');
+        
+        const jsonData = {
+          fullName: formData.get('fullName'),
+          email: formData.get('email'),
+          phone: formData.get('phone'),
+          projectDescription: formData.get('projectDescription'),
+          _replyto: formData.get('email'),
+          _subject: 'New Consultation Request from Permaguanacaste Website'
+        };
+
+        const jsonResponse = await fetch('https://formspree.io/f/mjkoagea', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(jsonData)
+        });
+
+        if (jsonResponse.ok) {
+          console.log('JSON submission successful');
+          setIsSubmitted(true);
+        } else {
+          const errorText = await jsonResponse.text();
+          console.error('Form submission error:', errorText);
+          throw new Error(`Form submission failed with status: ${jsonResponse.status}`);
+        }
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert('There was an error submitting your form. Please try again or contact us directly via WhatsApp.');
+      alert('There was an error submitting your form. Please try again or contact us directly via WhatsApp at +506 8302 1304.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section ref={containerRef} className="bg-white py-20">
+    <section id="contact" ref={containerRef} className="bg-white py-20">
       <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
         {/* Contact Form Section */}
         <motion.div 
@@ -128,6 +163,20 @@ const ContactForm = () => {
                       />
                     </div>
 
+                    {/* Preferred Contact Time */}
+                    <div>
+                      <label htmlFor="contactTime" className="block text-sm font-luxury font-medium text-stone-700 mb-2">
+                        Let us know the best time to contact you
+                      </label>
+                      <input
+                        type="text"
+                        id="contactTime"
+                        name="contactTime"
+                        className="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 font-luxury"
+                        placeholder="e.g., Weekday mornings, Tuesday 2-4pm, Anytime this week..."
+                      />
+                    </div>
+
                     {/* Project Description */}
                     <div>
                       <label htmlFor="projectDescription" className="block text-sm font-luxury font-medium text-stone-700 mb-2">
@@ -186,11 +235,7 @@ const ContactForm = () => {
                   <p className="text-lg font-luxury text-stone-600 mb-6 leading-relaxed">
                     Your consultation request has been successfully submitted. We'll review your project details and get back to you within 24 hours.
                   </p>
-                  <div className="bg-emerald-50 rounded-xl p-4 mb-6">
-                    <p className="text-sm font-luxury text-emerald-800">
-                      <strong>What's next?</strong> We'll reach out to schedule your free 30-minute consultation call to discuss your vision and how we can help bring it to life.
-                    </p>
-                  </div>
+
                   <button
                     onClick={() => setIsSubmitted(false)}
                     className="text-emerald-700 font-luxury font-medium hover:text-emerald-800 transition-colors duration-200"
@@ -211,32 +256,40 @@ const ContactForm = () => {
             >
               {/* WhatsApp Contact */}
               <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl p-8 border border-emerald-100">
-                <h3 className="text-2xl font-luxury font-semibold text-stone-800 mb-4 flex items-center">
-                  <svg className="w-6 h-6 mr-3 text-emerald-700" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.785"/>
-                  </svg>
-                  Prefer to Talk Directly?
-                </h3>
-                <p className="text-lg font-luxury text-stone-600 mb-4 leading-relaxed">
-                  Sometimes it's easier to have a conversation. Contact us directly via WhatsApp for immediate assistance and personalized guidance.
-                </p>
-                
-                <div className="mb-6">
-                  <p className="text-xl font-luxury font-semibold text-stone-800 mb-2">Call or message us on WhatsApp:</p>
-                  <p className="text-2xl font-luxury font-bold text-emerald-700">+506 8302 1304</p>
+                <div className="text-center">
+                  <h3 className="text-2xl font-luxury font-semibold text-stone-800 mb-6 flex items-center justify-center">
+                    <svg className="w-8 h-8 mr-3 text-emerald-700" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.785"/>
+                    </svg>
+                    Prefer to Talk Directly?
+                  </h3>
+
+                  <div className="mb-8">
+                    <p className="text-xl font-luxury text-stone-600 mb-6 leading-relaxed">
+                      Get instant answers and personalized guidance
+                    </p>
+                    
+                    <div className="bg-white rounded-xl p-6 mb-6 shadow-sm">
+                      <p className="text-lg font-luxury font-medium text-stone-700 mb-2">WhatsApp us now:</p>
+                      <p className="text-3xl font-luxury font-bold text-emerald-700">+506 8302 1304</p>
+                    </div>
+                  </div>
+                  
+                  <a
+                    href="https://wa.me/50683021304?text=Hi%20Permaguanacaste%2C%20I%27m%20interested%20in%20learning%20more%20about%20your%20permaculture%20design%20services."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center space-x-3 bg-[#25D366] hover:bg-[#20BA59] text-white font-luxury font-bold text-lg tracking-wide py-4 px-8 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 w-full"
+                  >
+                    <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.785"/>
+                    </svg>
+                    <span>Start a Chat</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
                 </div>
-                
-                <a
-                  href="https://wa.me/50683021304?text=Hi%20Permaguanacaste%2C%20I%27m%20interested%20in%20learning%20more%20about%20your%20permaculture%20design%20services."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-3 bg-emerald-600 hover:bg-emerald-700 text-white font-luxury font-medium tracking-wide py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.785"/>
-                  </svg>
-                  <span>Contact via WhatsApp</span>
-                </a>
               </div>
 
               {/* Additional Contact Info */}

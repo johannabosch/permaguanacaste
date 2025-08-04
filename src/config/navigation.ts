@@ -12,6 +12,5 @@ export interface NavigationSubItem {
 export const navigationItems: NavigationItem[] = [
   { label: "ABOUT", href: "#about" },
   { label: "SERVICES", href: "#services" },
-  { label: "PROJECTS", href: "/projects" },
-  { label: "CONTACT", href: "/contact" },
+  { label: "CONTACT", href: "#contact" },
 ]; 
