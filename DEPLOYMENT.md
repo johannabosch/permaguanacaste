@@ -4,6 +4,7 @@
 
 ### Prerequisites
 1. **GitHub Account** - Your code needs to be in a GitHub repository
+
 2. **Vercel Account** - Sign up at [vercel.com](https://vercel.com)
 3. **Domain Control** - Access to DNS settings for both domains:
    - `permaguanacaste.com`
