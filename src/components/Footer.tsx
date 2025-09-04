@@ -35,7 +35,18 @@ const Footer = () => {
             variants={fadeInUp}
             className="hidden lg:block lg:col-span-1"
           >
-
+            <div className="flex flex-col items-start">
+              <Image
+                src="/images/permalogo.png"
+                alt="Permaguanacaste Logo"
+                width={200}
+                height={67}
+                className="h-16 w-auto mb-4"
+              />
+              <p className="text-gray-600 font-luxury text-sm leading-relaxed max-w-xs">
+                Regenerative design and permaculture guidance for sustainable land development in Guanacaste, Costa Rica.
+              </p>
+            </div>
           </motion.div>
 
           {/* Contact Information - First on mobile */}

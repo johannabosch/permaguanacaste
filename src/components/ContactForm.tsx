@@ -2,11 +2,13 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const ContactForm = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useLanguage();
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -92,10 +94,10 @@ const ContactForm = () => {
         >
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-luxury font-black text-stone-800 mb-4">
-              Ready to Get Started?
+              {t.contact.title}
             </h2>
             <p className="text-xl font-luxury italic text-stone-600 max-w-3xl mx-auto">
-              Tell us about your vision and we'll help bring it to life. Book your free consultation today.
+              {t.contact.subtitle}
             </p>
           </div>
 
@@ -121,7 +123,7 @@ const ContactForm = () => {
                     {/* Full Name */}
                     <div>
                       <label htmlFor="fullName" className="block text-sm font-luxury font-medium text-stone-700 mb-2">
-                        Full Name *
+                        {t.contact.form.name} *
                       </label>
                       <input
                         type="text"
@@ -129,14 +131,14 @@ const ContactForm = () => {
                         name="fullName"
                         required
                         className="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 font-luxury"
-                        placeholder="Enter your full name"
+                        placeholder={t.contact.form.name}
                       />
                     </div>
 
                     {/* Email */}
                     <div>
                       <label htmlFor="email" className="block text-sm font-luxury font-medium text-stone-700 mb-2">
-                        Email Address *
+                        {t.contact.form.email} *
                       </label>
                       <input
                         type="email"
@@ -144,7 +146,7 @@ const ContactForm = () => {
                         name="email"
                         required
                         className="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 font-luxury"
-                        placeholder="your.email@example.com"
+                        placeholder={t.contact.form.email}
                       />
                     </div>
 

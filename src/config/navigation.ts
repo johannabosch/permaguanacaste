@@ -1,16 +1,17 @@
 export interface NavigationItem {
-  label: string;
+  key: string;
   href: string;
   subItems?: NavigationSubItem[];
 }
 
 export interface NavigationSubItem {
-  label: string;
+  key: string;
   href: string;
 }
 
 export const navigationItems: NavigationItem[] = [
-  { label: "ABOUT", href: "#about" },
-  { label: "SERVICES", href: "#services" },
-  { label: "CONTACT", href: "#contact" },
+  { key: "projects", href: "#projects" },
+  { key: "services", href: "#services" },
+  { key: "about", href: "#story" },
+  { key: "contact", href: "#contact" },
 ]; 

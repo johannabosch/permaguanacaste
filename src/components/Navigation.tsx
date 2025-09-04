@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { navigationItems } from "@/config/navigation";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const variants = {
   open: { transition: { staggerChildren: 0.07, delayChildren: 0.2 } },
@@ -51,6 +52,8 @@ const handleNavClick = (href: string, toggle: () => void) => {
 };
 
 export function Navigation({ toggle }: NavigationProps) {
+  const { t } = useLanguage();
+  
   return (
     <motion.ul variants={variants} className="absolute top-24 right-6 w-56 p-0 m-0 text-right">
       {navigationItems.map((item) => (
@@ -65,7 +68,7 @@ export function Navigation({ toggle }: NavigationProps) {
             onClick={() => handleNavClick(item.href, toggle)}
             className="text-lg font-luxury text-gray-500 hover:text-gray-700 transition-colors tracking-widest cursor-pointer"
           >
-            {item.label}
+            {t.navigation[item.key as keyof typeof t.navigation]}
           </div>
           {item.subItems && (
             <div className="mr-4 mt-2 text-right">
@@ -75,7 +78,7 @@ export function Navigation({ toggle }: NavigationProps) {
                   onClick={() => handleNavClick(subItem.href, toggle)}
                   className="block text-sm font-luxury text-gray-400 hover:text-gray-600 transition-colors tracking-wide mb-2 cursor-pointer"
                 >
-                  {subItem.label}
+                  {subItem.key}
                 </div>
               ))}
             </div>

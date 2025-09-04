@@ -113,3 +113,10 @@ body {
   color: var(--text-green-primary);
 }
 
+/* Custom service header styling */
+.service-header {
+  font-weight: 900 !important;
+  color: #599559 !important;
+  font-family: inherit;
+}
+

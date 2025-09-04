@@ -37,10 +37,10 @@ export default function MobileSidebar() {
       animate={isOpen ? "open" : "closed"}
       custom={height}
       ref={containerRef}
-      className="fixed top-0 right-0 bottom-0 w-[300px] z-50"
+      className="fixed top-0 right-0 bottom-0 w-[250px] z-50"
     >
       <motion.div
-        className="absolute top-0 right-0 bottom-0 w-[300px] bg-white"
+        className="absolute top-0 right-0 bottom-0 w-[250px] bg-white"
         variants={sidebar}
       />
       <Navigation toggle={() => toggleOpen()} />

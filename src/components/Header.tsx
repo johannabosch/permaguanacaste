@@ -6,10 +6,12 @@ import { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import MobileSidebar from './MobileSidebar';
 import { navigationItems } from '@/config/navigation';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Header = () => {
   const [showHeader, setShowHeader] = useState(false);
   const [isOverWhiteBackground, setIsOverWhiteBackground] = useState(false);
+  const { t } = useLanguage();
   
   // Framer Motion scroll tracking
   const { scrollY } = useScroll();
@@ -158,7 +160,7 @@ const Header = () => {
 
           {/* Desktop Header - Shows when scrolled past hero */}
           <motion.header 
-            className="hidden lg:block fixed top-0 left-0 right-0 z-50 px-4 lg:px-8 bg-transparent pt-6"
+            className="hidden lg:block fixed top-0 left-0 right-0 z-50 px-4 lg:px-8 bg-transparent pt-15"
             style={{
               height: headerHeight,
             }}
@@ -180,9 +182,9 @@ const Header = () => {
                     <Image
                       src="/images/permalogo.png"
                       alt="Permaguanacaste Logo"
-                      width={280}
-                      height={95}
-                      className="h-20 w-auto lg:h-24 transition-all duration-500"
+                      width={320}
+                      height={120}
+                      className="h-25 w-auto lg:h-35 transition-all duration-500"
                     />
                   </motion.div>
                 </Link>
@@ -201,7 +203,7 @@ const Header = () => {
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
                 {navigationItems.map((item) => {
-                  if (item.label === 'CONTACT') {
+                  if (item.key === 'contact') {
                     // Contact button (always visible)
                     return (
                       <motion.div 
@@ -211,7 +213,7 @@ const Header = () => {
                       >
                         <Link 
                           href={item.href} 
-                          className="border px-4 py-2 rounded-full transition-all duration-300 ease-out font-luxury tracking-widest flex items-center justify-center min-h-[40px]"
+                          className="border px-4 py-2 rounded-full transition-all duration-300 ease-out font-luxury tracking-widest flex items-center justify-center min-h-[40px] text-sm lg:text-xs"
                           style={{
                             backgroundColor: isOverWhiteBackground ? '#599559' : 'transparent',
                             borderColor: isOverWhiteBackground ? '#599559' : 'white',
@@ -237,7 +239,7 @@ const Header = () => {
                             }
                           }}
                         >
-                          {item.label}
+                          {t.navigation[item.key as keyof typeof t.navigation]}
                         </Link>
                       </motion.div>
                     );
@@ -258,7 +260,7 @@ const Header = () => {
                       >
                         <Link 
                           href={item.href} 
-                          className="px-4 py-2 transition-all duration-300 ease-out font-luxury tracking-widest rounded-full"
+                          className="px-4 py-2 transition-all duration-300 ease-out font-luxury tracking-widest rounded-full text-sm lg:text-xs"
                           style={{
                             color: isOverWhiteBackground ? '#374151' : 'white',
                           }}
@@ -276,7 +278,7 @@ const Header = () => {
                             e.currentTarget.style.backgroundColor = 'transparent';
                           }}
                         >
-                          {item.label}
+                          {t.navigation[item.key as keyof typeof t.navigation]}
                         </Link>
                       </motion.div>
                     );
