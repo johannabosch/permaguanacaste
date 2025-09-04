@@ -235,7 +235,7 @@ const ContactForm = () => {
                     Thank You!
                   </h3>
                   <p className="text-lg font-luxury text-stone-600 mb-6 leading-relaxed">
-                    Your consultation request has been successfully submitted. We'll review your project details and get back to you within 24 hours.
+                    Your consultation request has been successfully submitted. We&apos;ll review your project details and get back to you within 24 hours.
                   </p>
 
                   <button

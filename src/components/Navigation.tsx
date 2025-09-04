@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { navigationItems } from "@/config/navigation";
 import { useLanguage } from "../contexts/LanguageContext";
 

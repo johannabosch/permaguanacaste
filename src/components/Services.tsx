@@ -177,7 +177,7 @@ const Services = () => {
               <div className="w-full h-px bg-black mx-auto mb-6"></div>
             </div>
               <p className="text-xl lg:text-2xl font-luxury italic text-stone-600 max-w-3xl lg:max-w-6xl mx-auto">
-              We offer a range of services that honour the unique rhythms of your land. Drawing on our hands-on experience living and working in the tropics, we design projects that are both beautiful and ecologically resilient. Every design is tailored to your vision and your site's natural potential, creating spaces that thrive for years to come.              </p>
+              We offer a range of services that honour the unique rhythms of your land. Drawing on our hands-on experience living and working in the tropics, we design projects that are both beautiful and ecologically resilient. Every design is tailored to your vision and your site&apos;s natural potential, creating spaces that thrive for years to come.              </p>
             </motion.div>
 
             {/* Services List */}

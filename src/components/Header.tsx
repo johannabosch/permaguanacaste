@@ -50,22 +50,11 @@ const Header = () => {
   }, []);
   
   // Transform scroll values to animation properties
-  const headerBackground = useTransform(
-    scrollY,
-    [0, 100],
-    ["rgba(255, 255, 255, 0.1)", "rgba(255, 255, 255, 0.1)"]
-  );
-  
   const headerHeight = useTransform(
     scrollY, 
     [0, 100], 
     [100, 100]
   );
-  
-  // Dynamic text color based on background
-  const getCurrentTextColor = () => {
-    return isOverWhiteBackground ? "rgba(0, 0, 0, 1)" : "rgba(255, 255, 255, 1)";
-  };
 
   // Logo always visible when header shows
   const logoOpacity = useTransform(
