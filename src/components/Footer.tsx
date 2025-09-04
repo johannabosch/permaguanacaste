@@ -4,8 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { navigationItems } from '@/config/navigation';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Footer = () => {
+  const { t } = useLanguage();
+  
   // Animation variants
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
@@ -59,7 +62,7 @@ const Footer = () => {
             className="order-1 md:order-2 lg:order-3 lg:col-span-1"
           >
             <h3 className="text-gray-900 font-luxury font-bold text-base lg:text-lg mb-4 lg:mb-6 tracking-widest">
-              CONTACT
+              {t.footer.contactInfo}
             </h3>
             <div className="space-y-2 lg:space-y-3">
               <a 
@@ -100,7 +103,7 @@ const Footer = () => {
             className="order-2 md:order-1 lg:order-2 lg:col-span-1"
           >
             <h3 className="text-gray-900 font-luxury font-bold text-base lg:text-lg mb-4 lg:mb-6 tracking-widest">
-              NAVIGATION
+              {t.footer.quickLinks}
             </h3>
             <ul className="space-y-2 lg:space-y-3">
               {navigationItems.map((item) => (
@@ -109,7 +112,7 @@ const Footer = () => {
                     href={item.href}
                     className="text-gray-700 font-luxury text-sm tracking-wide hover:text-emerald-600 transition-colors duration-300 block"
                   >
-                    {item.label}
+                    {t.navigation[item.key as keyof typeof t.navigation]}
                   </Link>
                 </li>
               ))}
@@ -126,7 +129,7 @@ const Footer = () => {
             className="order-3 md:col-span-2 lg:col-span-1 lg:order-4"
           >
             <h3 className="text-gray-900 font-luxury font-bold text-base lg:text-lg mb-4 lg:mb-6 tracking-widest">
-              FOLLOW US
+              {t.footer.followUs}
             </h3>
             <div className="flex space-x-4 justify-start md:justify-start lg:justify-start">
               <motion.a 
@@ -182,7 +185,7 @@ const Footer = () => {
           className="border-t border-gray-300 pt-6 lg:pt-8 flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0"
         >
           <p className="text-gray-600 font-luxury text-xs lg:text-sm tracking-wide text-center lg:text-left">
-            © {new Date().getFullYear()} Permaguanacaste. All rights reserved.
+            {t.footer.copyrightStart}
           </p>
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-center">
             <Link 
