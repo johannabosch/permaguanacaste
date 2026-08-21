@@ -67,6 +67,13 @@ body {
   font-style: normal;
 }
 
+.font-luxury-bold {
+  font-family: "Red Hat Display", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
 .font-elegant {
   font-family: 'Maname', serif;
 }

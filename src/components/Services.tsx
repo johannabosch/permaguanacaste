@@ -60,7 +60,7 @@ const Services = () => {
       id: 'pools',
       title: t.services.items.pools.title,
       description: t.services.items.pools.description,
-      backgroundImages: ['/images/pond-design.png', '/images/pond-design2.jpg', '/images/pond-design3.jpg']
+      backgroundImages: ['/images/pond_design.jpg', '/images/pond-design2.jpg', '/images/pond-design3.jpg']
     },
     {
       id: 'food-systems',
@@ -176,8 +176,13 @@ const Services = () => {
               </h2>
               <div className="w-full h-px bg-black mx-auto mb-6"></div>
             </div>
-              <p className="text-xl lg:text-2xl font-luxury italic text-stone-600 max-w-3xl lg:max-w-6xl mx-auto">
-              We offer a range of services that honour the unique rhythms of your land. Drawing on our hands-on experience living and working in the tropics, we design projects that are both beautiful and ecologically resilient. Every design is tailored to your vision and your site&apos;s natural potential, creating spaces that thrive for years to come.              </p>
+              <p className="mx-auto text-xl lg:text-2xl font-luxury-bold text-stone-600 max-w-[300px] lg:max-w-7xl">
+              We offer a range of permaculture and landscaping services. 
+              </p>
+              
+              <span></span><p className="text-lg lg:text-xl font-luxury italic text-stone-600 max-w-3xl lg:max-w-3xl mx-auto pt-5">
+
+              Drawing on our hands-on experience living and working in the tropics, we design projects that are both beautiful and ecologically resilient. Every design is tailored to your vision and your site&apos;s natural potential, creating spaces that thrive for years to come.             </p>
             </motion.div>
 
             {/* Services List */}

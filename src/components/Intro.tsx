@@ -33,10 +33,10 @@ const Intro = () => {
         <div>
           {/* Desktop Layout */}
           <div className="hidden lg:block relative min-h-[60vh] flex items-center justify-center">
-            {/* Coffee Image - Left side */}
+            {/* Coffee Image - Right side */}
             <motion.div
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10"
-              initial={{ opacity: 0, scale: 0.8, x: -30 }}
+              className="absolute right-[-50px] top-1/2 transform -translate-y-1/2 z-10"
+              initial={{ opacity: 0, scale: 0.8, x: 30 }}
               whileInView={{ opacity: 1, scale: 1, x: 0 }}
               transition={{ 
                 duration: 1, 
@@ -52,51 +52,29 @@ const Intro = () => {
                 alt="Coffee fruits"
                 width={600}
                 height={400}
-                className="max-w-[400px]"
+                className="max-w-[500px] transform scale-x-[-1] rotate-3"
               />
             </motion.div>
 
-            {/* Center Text */}
-            <div className="flex items-center justify-center min-h-[60vh] px-4 lg:px-8">
+            {/* Left-aligned Text */}
+            <div className="flex items-center justify-start min-h-[60vh] px-4 lg:px-8 mr-[500px]">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="text-center max-w-4xl z-20 relative"
+                className="text-left max-w-4xl z-20 relative"
               >
                 {/* Description */}
                 <motion.p
                   custom={2}
                   variants={fadeInUp}
-                  className="text-2xl lg:text-2xl text-black leading-relaxed font-luxury max-w-2xl"
+                  className="text-2xl lg:text-2xl text-black leading-relaxed font-luxury w-full lg:w-auto lg:min-w-[600px] lg:pl-[50px] lg:max-w-[calc(100vw-600px)] max-w-2xl"
                 >
                   {t.intro.description}
                 </motion.p>
               </motion.div>
             </div>
 
-            {/* Banana Image - Right side */}
-            <motion.div
-              className="absolute right-[-50] top-1/2 transform -translate-y-1/2 z-10"
-              initial={{ opacity: 0, scale: 0.8, x: 30 }}
-              whileInView={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{ 
-                duration: 1, 
-                delay: 0.3,
-                ease: "easeOut",
-                type: "spring",
-                stiffness: 100 
-              }}
-              viewport={{ once: true }}
-            >
-              <Image
-                src="/images/banana.png"
-                alt="banana tree"
-                width={600}
-                height={400}
-                className="max-w-[500px] transform scale-x-[-1]"
-              />
-            </motion.div>
           </div>
 
           {/* Mobile Layout - Stacked vertically */}
