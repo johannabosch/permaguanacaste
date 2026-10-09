@@ -1,28 +1,22 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
-export function useDimensions(ref: React.RefObject<HTMLElement>) {
-  const dimensions = useRef({ width: 0, height: 0 });
+export function useDimensions(ref: React.RefObject<HTMLElement | null>) {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    if (ref.current) {
-      dimensions.current.width = ref.current.offsetWidth;
-      dimensions.current.height = ref.current.offsetHeight;
-      
-      // Update dimensions on resize
-      const updateDimensions = () => {
-        if (ref.current) {
-          dimensions.current.width = ref.current.offsetWidth;
-          dimensions.current.height = ref.current.offsetHeight;
-        }
-      };
+    const updateDimensions = () => {
+      const element = ref.current;
+      if (!element) return;
+      setDimensions({
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+      });
+    };
 
-      window.addEventListener('resize', updateDimensions);
-      
-      return () => {
-        window.removeEventListener('resize', updateDimensions);
-      };
-    }
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
   }, [ref]);
 
-  return dimensions.current;
+  return dimensions;
 } 
